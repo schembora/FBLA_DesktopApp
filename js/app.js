@@ -104,11 +104,12 @@ function createReport () {
 	var senior = $("#senior").is(':checked');
 	var memNum = $("#memNum").is(':checked');
 	var fullName = $("#name").is(':checked');
+	var state = $("#state").is(':checked');
 	var email = $("#email").is(':checked');
 	var year = $("#year").is(':checked');
 	var grade = $("#grade").is(':checked');
 	var amountOwed = $("#amountOwed").is(':checked');
-	document.location = "realReport.html?" + sortChoice + ',' + owes + ',' +  owesNot + ',' + frosh + ',' + soph + ',' + junior + ',' + senior+ ',' +  memNum + ',' + fullName + ',' + email + ',' + year + ','+ grade + ',' + amountOwed; 
+	document.location = "realReport.html?" + sortChoice + ',' + owes + ',' +  owesNot + ',' + frosh + ',' + soph + ',' + junior + ',' + senior+ ',' +  memNum + ',' + fullName + ',' +state + "," + email + ',' + year + ','+ grade + ',' + amountOwed; 
 }
 function processData(){
 	var lineNum = getLineNum();
@@ -117,8 +118,10 @@ function processData(){
 	var sortColumnNumber = parseInt(query[0]);
 	var dataArraySorted = sortData(dataArray, sortColumnNumber);
 	var filteredMembers = filterMembers(dataArraySorted, lineNum);
+	var selectArray = gatherTableData(filteredMembers, lineNum);
+	createReportHeaders(selectArray);
 	console.log(filteredMembers);
-	createReportTable(filteredMembers);
+	createReportBody(filteredMembers, selectArray);
 }
 function sortData(dataArray,sortColumnNumber){
 	if (sortColumnNumber === 0){
@@ -162,30 +165,36 @@ function filterMembers(sortedDataArray, lineNum) {
 function gatherTableData(filteredMembers, lineNum) {
 	var memNum =  lineNum.split(',')[7] == "true";
 	var fullName = lineNum.split(',')[8] == "true";
-	var email = lineNum.split(',')[9] == "true";
-	var year = lineNum.split(',')[10] == "true";
-	var grade = lineNum.split(',')[11] == "true";
-	var amountOwed = lineNum.split(',')[12] == "true";
-	var sortedArray = filteredMembers();
+	var state = lineNum.split(',')[9] == "true";
+	var email = lineNum.split(',')[10] == "true";
+	var year = lineNum.split(',')[11] == "true";
+	var grade = lineNum.split(',')[12] == "true";
+	var amountOwed = lineNum.split(',')[13] == "true";
+	var selectArray = [memNum,fullName, fullName, false, state, email, year, false, amountOwed, grade];
+	return selectArray;
 }
 
-function createReportTable(filteredMembers) {
-	var includeArray = [true, true, true, false, true, false, false, false, false, true];	// 10th element is grade
+function createReportBody(filteredMembers, selectArray) {	// 10th element is grade
 	var table = document.getElementById("tableBody");
 	var rows = "";
-	var headerArray = ["Membership Number", "Name", ""]
 	var gradeArray = [[2015, "Freshman"], [2014, "Sophmore"], [2013, "Junior"], [2012 ,"Senior"]]
 	for (i = 0; i < filteredMembers.length; i++){
 		var lineArray = filteredMembers[i].toString().split(',');
 		rows+= "<tr>";
 		for (var j = 0; j < 10; j++){
-			if (includeArray[j] == true){
+			if (selectArray[j]){
 				if (j === 9){
 					for (var p = 0; p < 4; p++){
 						if (lineArray[6] == gradeArray[p][0]){
 							rows+= "<td>" + gradeArray[p][1] + "</td>";
 						}
 					}
+				}
+				else if (j == 1){
+					rows+= "<td>" + lineArray[j] + " " + lineArray[j+1] + "</td>";
+				}
+				else if (j == 2){
+					continue;
 				}
 				else{
 					rows+= "<td>" + lineArray[j] + "</td>"; 
@@ -196,6 +205,20 @@ function createReportTable(filteredMembers) {
 		rows+= "</tr>"
 	}
 	table.innerHTML = rows;
+}
+function createReportHeaders(selectArray){
+		var headerArray = ["Membership Number", "Name", "",null,"State","Email","Year Joined",null,"Amount Owed", "Grade"];
+		var table = document.getElementById("tableHead");
+		var head = "<tr>";
+		for (i = 0; i < 10; i++){
+			if (selectArray[i]){
+				if (i == 2){continue;}
+				head+= "<th>" + headerArray[i]+ "</th>";
+			}
+		}
+		head+= "</tr>";
+		table.innerHTML = head;
+		
 }
 
 
