@@ -124,8 +124,14 @@ function processData(){
 	createReportBody(filteredMembers, selectArray);
 }
 function sortData(dataArray,sortColumnNumber){
-	if (sortColumnNumber === 0){
-		return dataArray;
+
+	if (sortColumnNumber === 8 || sortColumnNumber === 0){
+		var sorted1Array = dataArray.sort(function(a,b){
+			var a = parseInt(a.split(',')[sortColumnNumber]);
+			var b = parseInt(b.split(',')[sortColumnNumber]);
+			return a-b;
+		});
+		return sorted1Array;
 	}
 	else{
 		var sortedArray = dataArray.sort(function(a,b){
@@ -207,7 +213,7 @@ function createReportBody(filteredMembers, selectArray) {	// 10th element is gra
 	table.innerHTML = rows;
 }
 function createReportHeaders(selectArray){
-		var headerArray = ["Membership Number", "Name", "",null,"State","Email","Year Joined",null,"Amount Owed", "Grade"];
+		var headerArray = ["Membership Number", "Name",null,null,"State","Email","Year Joined",null,"Amount Owed", "Grade"];
 		var table = document.getElementById("tableHead");
 		var head = "<tr>";
 		for (i = 0; i < 10; i++){
