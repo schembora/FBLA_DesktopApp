@@ -1,0 +1,53 @@
+<html>
+	<head> 
+		<title> FBLA User Database </title>
+        
+        <link rel="stylesheet" type ="text/css" href="../css/main.css" />
+        <link rel="stylesheet" type ="text/css" href="../css/bootstrap.min.css" />
+        <script type="text/javascript" src="../js/jquery-2.1.4.min.js"></script> 
+	</head>
+
+		<h1> Select a Report to View or Print </h1>
+		
+        
+        <form>
+              
+              <div style = "margin-top:25%;">
+                <label> Sort By </label>
+                <select id = 'sortChoices'>
+                      <option value = "0"> Membership Number </option>
+                      <option value = "1"> First Name </option>
+                      <option value  = "2"> Last Name </option>
+                      <option value = "3"> School </option>
+                      <option value = "4"> State </option>
+                </select>
+              </div>
+              
+               <div id = "checkboxes" style = "margin-bottom: 2%; margin-top: 2%;">
+                <label class="checkbox-inline"><input type="checkbox" id = "optionOwes">Members Owing A Balance</label>
+                <label class="checkbox-inline"><input type="checkbox" id = "optionOwesNot">Members Not Owing A Balance</label>
+              </div>
+              <div id = "checkboxes2" >
+                <label class="checkbox-inline"><input type="checkbox" id = "frosh">Freshmen</label>
+                <label class="checkbox-inline"><input type="checkbox" id = "soph">Sophmores</label>
+                <label class="checkbox-inline"><input type="checkbox" id = "junior">Juniors</label>
+                <label class="checkbox-inline"><input type="checkbox" id = "senior">Seniors</label>
+              </div>
+              <div id = 'checkboxes3' style = "margin-top: 2%; margin-bottom: 15%;">
+                <label class="checkbox-inline"><input type="checkbox" id = "memNum">Membership Number</label>
+                <label class="checkbox-inline"><input type="checkbox" id = "name">Name</label>
+                <label class="checkbox-inline"><input type="checkbox" id = "email">Email</label>
+                <label class="checkbox-inline"><input type="checkbox" id = "year">Year Joined</label>
+                <label class="checkbox-inline"><input type="checkbox" id = "grade">Grade</label>
+                <label class="checkbox-inline"><input type="checkbox" id = "amountOwed">Amount Owed</label>
+              </div>
+              
+              
+        </form>
+
+        <div id = "button" class = "text-center">
+               <button id = "viewReport" class = "btn btn-success" onclick="createReport()">View the Report</button>
+        </div>
+ 
+        <script type="text/javascript" src="../js/app.js"></script> 
+</html>

@@ -1,0 +1,17 @@
+{
+	"name": "FBLA",
+	"main": "./html/homepage.html",
+	"window":{
+		"title": "FBLA Database",
+		"toolbar": true,
+		"icon": "icon.png",
+		"frame": true,
+		"width": 800,
+		"height": 650,
+		"position": "mouse",
+		"min_width": 400,
+		"min_height": 500,
+		"max_width": 800,
+		"max_height": 650
+	}
+}
