@@ -109,7 +109,8 @@ function createReport () {
 	var year = $("#year").is(':checked');
 	var grade = $("#grade").is(':checked');
 	var amountOwed = $("#amountOwed").is(':checked');
-	document.location = "realReport.html?" + sortChoice + ',' + owes + ',' +  owesNot + ',' + frosh + ',' + soph + ',' + junior + ',' + senior+ ',' +  memNum + ',' + fullName + ',' +state + "," + email + ',' + year + ','+ grade + ',' + amountOwed; 
+	var radioTrue = $("#footerTrue").is(':checked');
+	document.location = "realReport.html?" + sortChoice + ',' + owes + ',' +  owesNot + ',' + frosh + ',' + soph + ',' + junior + ',' + senior+ ',' +  memNum + ',' + fullName + ',' +state + "," + email + ',' + year + ','+ grade + ',' + amountOwed + ',' + radioTrue;
 }
 function processData(){
 	var lineNum = getLineNum();
@@ -122,6 +123,7 @@ function processData(){
 	createReportHeaders(selectArray);
 	console.log(filteredMembers);
 	createReportBody(filteredMembers, selectArray);
+	createFooter(filteredMembers, lineNum);
 }
 function sortData(dataArray,sortColumnNumber){
 
@@ -225,6 +227,26 @@ function createReportHeaders(selectArray){
 		head+= "</tr>";
 		table.innerHTML = head;
 		
+}
+function createFooter(sortedArray, lineNum){
+	var numOfOwing = 0, numOfNotOwing = 0;
+	var numOfActive= 0, numOfInactive= 0;
+	var footerTrue = lineNum.split(',')[14] == "true";
+	if (footerTrue){
+		for (i = 0; i < sortedArray.length; i++){
+			if (parseInt(sortedArray[9]) > 0){
+				numOfActive++;
+			}
+			if (parseInt(sortedArray[10]) > 0){
+				numOfOwing++;
+			}
+		}
+		numOfInactive = sortedArray.length - numOfActive;
+		numOfNotOwing = sortedArray.length - numOfOwing;
+		document.getElementById("footerBody").innerHTML = "Number Of Members Owing: " + numOfOwing + " Number of Members Not Owing: " + numOfNotOwing;
+		document.getElementById("footerBody1").innerHTML = "Number of Active Members: " + numOfActive + " Number of Inactive Members: " + numOfInactive;
+	}
+
 }
 
 
