@@ -1,7 +1,6 @@
 /* global i */
 // Set a global var to hold filesystem utility object
 var fs = require('fs');
-
 // Function to write to a file
 function saveToFile () {
 	var memNumber = document.getElementById("memNumber").value;
@@ -229,21 +228,25 @@ function createReportHeaders(selectArray){
 		
 }
 function createFooter(sortedArray, lineNum){
-	var numOfOwing = 0, numOfNotOwing = 0;
+	var numOfOwing = 0; var sum = 0;
 	var numOfActive= 0, numOfInactive= 0;
 	var footerTrue = lineNum.split(',')[14] == "true";
 	if (footerTrue){
 		for (i = 0; i < sortedArray.length; i++){
-			if (parseInt(sortedArray[9]) > 0){
-				numOfActive++;
+			var lineArray = sortedArray[i].split(',');
+			if (parseInt(lineArray[7]) > 0){
+				numOfActive++;				
 			}
-			if (parseInt(sortedArray[10]) > 0){
+			if (parseInt(lineArray[8]) > 0){
 				numOfOwing++;
+				sum+= parseInt(lineArray[8]);
 			}
+			
+			
+			
 		}
 		numOfInactive = sortedArray.length - numOfActive;
-		numOfNotOwing = sortedArray.length - numOfOwing;
-		document.getElementById("footerBody").innerHTML = "Number Of Members Owing: " + numOfOwing + " Number of Members Not Owing: " + numOfNotOwing;
+		document.getElementById("footerBody").innerHTML = "Number Of Members Owing: " + numOfOwing + " Total Amount Owed: " + sum;
 		document.getElementById("footerBody1").innerHTML = "Number of Active Members: " + numOfActive + " Number of Inactive Members: " + numOfInactive;
 	}
 

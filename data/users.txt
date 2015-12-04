@@ -1,4 +1,4 @@
-2,Aspen,Martin,Pede Malesuada Vel Company,MS,varius@conubianostra.net,2015,1,37709
+2,Aspen,Martin,Pede Malesuada Vel Company,MS,varius@conubianostra.net,2015,0,0
 3,Andrew,Howard,Porttitor Interdum Sed Company,CA,auctor.vitae.aliquet@aliquamenimnec.net,2015,1,399616
 4,Maya,Black,Sed Leo Ltd,MA,pretium.et.rutrum@nonbibendum.org,2015,0,241897
 5,Rebekah,Patel,Faucibus Morbi Vehicula Ltd,IL,nibh@Innecorci.co.uk,2012,1,323641
