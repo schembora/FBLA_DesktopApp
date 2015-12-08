@@ -120,7 +120,6 @@ function processData(){
 	var filteredMembers = filterMembers(dataArraySorted, lineNum);
 	var selectArray = gatherTableData(filteredMembers, lineNum);
 	createReportHeaders(selectArray);
-	console.log(filteredMembers);
 	createReportBody(filteredMembers, selectArray);
 	createFooter(filteredMembers, lineNum);
 }
@@ -187,6 +186,13 @@ function createReportBody(filteredMembers, selectArray) {	// 10th element is gra
 	var gradeArray = [[2015, "Freshman"], [2014, "Sophmore"], [2013, "Junior"], [2012 ,"Senior"]]
 	for (i = 0; i < filteredMembers.length; i++){
 		var lineArray = filteredMembers[i].toString().split(',');
+		if (i % 50 === 0 && i > 0){
+			rows+= "<tr class = 'pagebreak'></tr>";	
+			/*rows+= "</table>";
+			rows+= "Apple";
+			rows+= "<table>";
+			*/
+		}
 		rows+= "<tr>";
 		for (var j = 0; j < 10; j++){
 			if (selectArray[j]){
@@ -246,13 +252,11 @@ function createFooter(sortedArray, lineNum){
 			
 		}
 		numOfInactive = sortedArray.length - numOfActive;
-		document.getElementById("footerBody").innerHTML = "Number Of Members Owing: " + numOfOwing + " Total Amount Owed: " + sum;
+		document.getElementById("footerBody").innerHTML = "Number Of Members Owing: " + numOfOwing + " Total Amount Owed: $" + sum;
 		document.getElementById("footerBody1").innerHTML = "Number of Active Members: " + numOfActive + " Number of Inactive Members: " + numOfInactive;
 	}
 
 }
-
-
 
 // Set handler for button click
 document.getElementById('btnSaveFile').addEventListener('click', function (e) {

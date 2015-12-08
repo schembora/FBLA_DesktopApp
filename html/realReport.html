@@ -1,16 +1,16 @@
 <html>
 	<head>
 		<link rel="stylesheet" type ="text/css" href="../css/bootstrap.min.css" />
+		<link rel="stylesheet" type ="text/css" href="../css/main.css" />
+
 	</head>
 	<body onload="processData()">
-		<table align = "center" style = "border: 1px solid #000;"class = "table table-bordered">
+		<table id = "reportTable" align = "center" style = "border: 1px solid #000;"class = "table table-bordered">
 			<thead id = "tableHead">
 
 			</thead>
 			<tbody id = "tableBody">
 			</tbody>
-			
-			
 		</table>
 	<div id = "tempFoot">	
 		<div class="panel panel-default" id = "footer">
@@ -20,6 +20,7 @@
 	</div>
 	<button onclick="window.print()"> Print </button>
 	</body>
-	
-	 <script type="text/javascript" src="../js/app.js"></script> 
+
+	 	<script type="text/javascript" src="../js/app.js"></script> 
+
 </html>

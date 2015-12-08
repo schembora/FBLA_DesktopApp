@@ -22,3 +22,15 @@ form
 {
 	padding-right:80%;
 }
+table.table-bordered tr td{
+    padding: 0px;
+    font-size:10px;
+}
+@media print {
+    tr.pagebreak{
+    page-break-before: always;
+    display: block;
+    }
+}
+
+
