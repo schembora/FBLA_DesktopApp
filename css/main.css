@@ -24,13 +24,20 @@ form
 }
 table.table-bordered tr td{
     padding: 0px;
-    font-size:10px;
+    font-size:11px;
 }
+button.hideOnPrint{
+        display: block;
+    }
 @media print {
-    tr.pagebreak{
+    table.table-bordered{
     page-break-before: always;
     display: block;
     }
+    button.hideOnPrint{
+        display:none;
+    }
+    
 }
 
 
