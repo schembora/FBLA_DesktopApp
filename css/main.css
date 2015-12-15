@@ -29,6 +29,7 @@ table.table-bordered tr td{
 button.hideOnPrint{
         display: block;
     }
+
 @media print {
     table.table-bordered{
     page-break-before: always;
@@ -37,7 +38,30 @@ button.hideOnPrint{
     button.hideOnPrint{
         display:none;
     }
+    thead.printPageHeader{
+        display: always;
+    }
+    
+}
+@media only screen{
+
+    table tr td{
+        overflow: hidden;
+    }
+    table.table{
+        table-layout: fixed;
+        margin-bottom: 0;
+    }
+    thead{
+        display:always;
+    }
+    thead.printPageHeader{
+       display:none;
+    }
     
 }
 
+/*body{
+    padding-top: 50px;
+}*/
 

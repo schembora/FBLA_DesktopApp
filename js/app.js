@@ -119,7 +119,6 @@ function processData(){
 	var dataArraySorted = sortData(dataArray, sortColumnNumber);
 	var filteredMembers = filterMembers(dataArraySorted, lineNum);
 	var selectArray = gatherTableData(filteredMembers, lineNum);
-	createReportHeaders(selectArray);
 	createReportBody(filteredMembers, selectArray);
 	createFooter(filteredMembers, lineNum);
 }
@@ -177,12 +176,14 @@ function gatherTableData(filteredMembers, lineNum) {
 	var grade = lineNum.split(',')[12] == "true";
 	var amountOwed = lineNum.split(',')[13] == "true";
 	var selectArray = [memNum,fullName, fullName, false, state, email, year, false, amountOwed, grade];
+	console.log(selectArray);
 	return selectArray;
 }
 
 function createReportBody(filteredMembers, selectArray) {	// 10th element is grade
 	var container = document.getElementById("reportContainer");
 	var rows = "";
+	var colWidth = getColWidth(selectArray);
 	var gradeArray = [[2015, "Freshman"], [2014, "Sophmore"], [2013, "Junior"], [2012 ,"Senior"]]
 	for (var i = 0; i < filteredMembers.length; i++){
 		var lineArray = filteredMembers[i].toString().split(',');
@@ -190,7 +191,7 @@ function createReportBody(filteredMembers, selectArray) {	// 10th element is gra
 			if (i > 0){
 				rows+= "</table>";
 			}
-			rows+= createReportHeaders(selectArray);
+			rows+= createReportHeaders(selectArray, i === 0);
 			
 		}
 		rows+= "<tr>";
@@ -199,18 +200,18 @@ function createReportBody(filteredMembers, selectArray) {	// 10th element is gra
 				if (j === 9){
 					for (var p = 0; p < 4; p++){
 						if (lineArray[6] == gradeArray[p][0]){
-							rows+= "<td>" + gradeArray[p][1] + "</td>";
+							rows+= "<td style='width: "+ colWidth + "%;max-width: "+ colWidth + "%;'>" + gradeArray[p][1] + "</td>";
 						}
 					}
 				}
 				else if (j == 1){
-					rows+= "<td>" + lineArray[j] + " " + lineArray[j+1] + "</td>";
+					rows+= "<td style='width: "+ colWidth + "%;max-width: "+ colWidth + "%;'>" + lineArray[j] + " " + lineArray[j+1] + "</td>";
 				}
 				else if (j == 2){
 					continue;
 				}
 				else{
-					rows+= "<td>" + lineArray[j] + "</td>"; 
+					rows+= "<td style='width: "+ colWidth + "%;max-width: "+ colWidth + "%;'>" + lineArray[j] + "</td>"; 
 				}
 
 			}
@@ -219,10 +220,11 @@ function createReportBody(filteredMembers, selectArray) {	// 10th element is gra
 	}
 	container.innerHTML = rows;
 }
-function createReportHeaders(selectArray){
+function createReportHeaders(selectArray, isFirst){
 		var headerArray = ["Membership Number", "Name",null,null,"State","Email","Year Joined",null,"Amount Owed", "Grade"];
 		//var table = document.getElementById("tableHead");
-		var head = "<table class='table table-bordered'><thead><tr>";
+		var head = "<table class='table table-bordered'><thead "+ (isFirst ? "" : "class = 'printPageHeader'") + "><tr>";
+		var colWidth = getColWidth(selectArray);
 		for (var i = 0; i < 10; i++){
 			if (selectArray[i]){
 				if (i == 2){continue;}
@@ -230,9 +232,23 @@ function createReportHeaders(selectArray){
 			}
 		}
 		head+= "</tr></thead>";
+				console.log("header is :" + head);
 		return head;
 		//table.innerHTML = head;
 		
+}
+function getColWidth(selectArray){
+	var numCols = 0;
+	for (var i = 0; i < 10; i++){
+		if (selectArray[i]){
+			numCols++;
+			if (i == 1){
+				numCols--;
+			}
+		}
+		
+	}
+	return Math.floor(100/numCols);
 }
 function createFooter(sortedArray, lineNum){
 	var numOfOwing = 0; var sum = 0;
