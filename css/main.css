@@ -25,6 +25,7 @@ form
 table.table-bordered tr td{
     padding: 0px;
     font-size:11px;
+    padding-left:5px;
 }
 button.hideOnPrint{
         display: block;
@@ -59,6 +60,9 @@ button.hideOnPrint{
        display:none;
     }
     
+}
+#underNav{
+    padding-top:40px;
 }
 
 /*body{

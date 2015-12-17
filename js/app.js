@@ -119,7 +119,8 @@ function processData(){
 	var dataArraySorted = sortData(dataArray, sortColumnNumber);
 	var filteredMembers = filterMembers(dataArraySorted, lineNum);
 	var selectArray = gatherTableData(filteredMembers, lineNum);
-	createReportBody(filteredMembers, selectArray);
+	var tableHtml = createReportBody(filteredMembers, selectArray);
+	document.getElementById("reportContainer").innerHTML= tableHtml;
 	createFooter(filteredMembers, lineNum);
 }
 function sortData(dataArray,sortColumnNumber){
@@ -218,7 +219,7 @@ function createReportBody(filteredMembers, selectArray) {	// 10th element is gra
 		}
 		rows+= "</tr>"
 	}
-	container.innerHTML = rows;
+	return rows;
 }
 function createReportHeaders(selectArray, isFirst){
 		var headerArray = ["Membership Number", "Name",null,null,"State","Email","Year Joined",null,"Amount Owed", "Grade"];
@@ -273,6 +274,21 @@ function createFooter(sortedArray, lineNum){
 		document.getElementById("footerBody1").innerHTML = "Number of Active Members: " + numOfActive + " Number of Inactive Members: " + numOfInactive;
 	}
 
+}
+function toExcel(){
+	var lineNum = getLineNum();
+	var dataArray = loadFromFile();
+	var query = lineNum.split(',');
+	var sortColumnNumber = parseInt(query[0]);
+	var dataArraySorted = sortData(dataArray, sortColumnNumber);
+	var filteredMembers = filterMembers(dataArraySorted, lineNum);
+	var selectArray = gatherTableData(filteredMembers, lineNum);
+	var tableHtml = createReportBody(filteredMembers, selectArray);
+	fs.writeFile("andrew.xls", tableHtml, function(err) {
+    if(err) {
+        return console.log(err);
+    	}
+	});
 }
 
 // Set handler for button click
