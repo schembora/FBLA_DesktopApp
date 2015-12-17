@@ -275,7 +275,7 @@ function createFooter(sortedArray, lineNum){
 	}
 
 }
-function toExcel(){
+function toExcel(filePath){
 	var lineNum = getLineNum();
 	var dataArray = loadFromFile();
 	var query = lineNum.split(',');
@@ -284,9 +284,9 @@ function toExcel(){
 	var filteredMembers = filterMembers(dataArraySorted, lineNum);
 	var selectArray = gatherTableData(filteredMembers, lineNum);
 	var tableHtml = createReportBody(filteredMembers, selectArray);
-	fs.writeFile("andrew.xls", tableHtml, function(err) {
+	fs.writeFile(filePath, tableHtml, function(err) {
     if(err) {
-        return console.log(err);
+        	alert(err);
     	}
 	});
 }
