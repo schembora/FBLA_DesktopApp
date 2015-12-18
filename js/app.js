@@ -119,7 +119,7 @@ function processData(){
 	var dataArraySorted = sortData(dataArray, sortColumnNumber);
 	var filteredMembers = filterMembers(dataArraySorted, lineNum);
 	var selectArray = gatherTableData(filteredMembers, lineNum);
-	var tableHtml = createReportBody(filteredMembers, selectArray);
+	var tableHtml = createReportBody(filteredMembers, selectArray, true);
 	document.getElementById("reportContainer").innerHTML= tableHtml;
 	createFooter(filteredMembers, lineNum);
 }
@@ -181,20 +181,27 @@ function gatherTableData(filteredMembers, lineNum) {
 	return selectArray;
 }
 
-function createReportBody(filteredMembers, selectArray) {	// 10th element is grade
+function createReportBody(filteredMembers, selectArray, withBreaks) {	// 10th element is grade
 	var container = document.getElementById("reportContainer");
 	var rows = "";
 	var colWidth = getColWidth(selectArray);
 	var gradeArray = [[2015, "Freshman"], [2014, "Sophmore"], [2013, "Junior"], [2012 ,"Senior"]]
 	for (var i = 0; i < filteredMembers.length; i++){
 		var lineArray = filteredMembers[i].toString().split(',');
-		if (i % 50 === 0){
+		if (withBreaks){
+			if (i % 50 === 0){
 			if (i > 0){
-				rows+= "</table>";
+					rows+= "</table>";
+				}
+				rows+= createReportHeaders(selectArray, i === 0);
 			}
-			rows+= createReportHeaders(selectArray, i === 0);
-			
 		}
+		else{
+			if (i == 0){
+				rows+= createReportHeaders(selectArray, true);
+			}
+		}
+		
 		rows+= "<tr>";
 		for (var j = 0; j < 10; j++){
 			if (selectArray[j]){
@@ -219,6 +226,7 @@ function createReportBody(filteredMembers, selectArray) {	// 10th element is gra
 		}
 		rows+= "</tr>"
 	}
+	if (!withBreaks){rows+= "</table>"}
 	return rows;
 }
 function createReportHeaders(selectArray, isFirst){
@@ -233,7 +241,7 @@ function createReportHeaders(selectArray, isFirst){
 			}
 		}
 		head+= "</tr></thead>";
-				console.log("header is :" + head);
+		console.log("header is :" + head);
 		return head;
 		//table.innerHTML = head;
 		
@@ -283,7 +291,7 @@ function toExcel(filePath){
 	var dataArraySorted = sortData(dataArray, sortColumnNumber);
 	var filteredMembers = filterMembers(dataArraySorted, lineNum);
 	var selectArray = gatherTableData(filteredMembers, lineNum);
-	var tableHtml = createReportBody(filteredMembers, selectArray);
+	var tableHtml = createReportBody(filteredMembers, selectArray,false);
 	fs.writeFile(filePath, tableHtml, function(err) {
     if(err) {
         	alert(err);

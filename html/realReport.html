@@ -6,6 +6,10 @@
 	</head>
 
 	<body onload="processData()">
+	<div class = "col-md-4 center-block">
+	<button id="hideOnPrint" class = "btn btn-md btn-primary"onclick="window.print()"> Print </button>
+	<button id="hideOnPrint" class = "btn btn-md btn-primary"onclick="chooseFile('#fileDialog');"> Export </button>
+	</div>
 	<div id = "reportContainer">
 		
 	</div>	
@@ -16,8 +20,6 @@
 		</div>
 	</div>
 
-	<button class="hideOnPrint" onclick="window.print()"> Print </button>
-	<button class="hideOnPrint" onclick="chooseFile('#fileDialog');"> Export To Excel </button>
 	<input type="file" id="fileDialog" style="display:none;"  nwsaveas="FBLAReport.xls" />
 	<script>
   function chooseFile(name) {
