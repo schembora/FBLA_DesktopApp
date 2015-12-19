@@ -16,20 +16,22 @@
         </div>
       </div>
     </nav>
-    <body id = "underNav">
+    <body onLoad = "createForm()"id = "underNav">
     <h1> Add a User</h1>
     <div style = "width: 80%; margin: 10px auto 10px auto;">
 	<form class = "form-horizontal" role = "form" autocomplete="off">
 		<div class="form-group">
+      <fieldset disabled>
     		<label class="control-label col-sm-4" for="memNumber">Mem Number:</label>
     		<div class="col-sm-5">
      			<input type="number" class="form-control" id="memNumber">
     		</div>
+      </fieldset>
   		</div>
 		  <div class="form-group">
     		<label class="control-label col-sm-4" for="firstName">First Name:</label>
     		<div class="col-sm-5">
-     			<input type="text" class="form-control" id="firstName">
+     			<input type="text" class="form-control" id="firstName" required>
     		</div>
   		</div>
 		  <div class="form-group">
@@ -75,7 +77,8 @@
      			<input type="number" class="form-control" id="amountOwed">
     		</div>
   		</div>
-        <button id = "btnSaveFile" class = "btn btn-success">Add the User</button>
+        <button id = "submit" class = "btn btn-success">Submit</button>
+	</form>
 	</div>
     </body>
 

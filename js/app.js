@@ -14,6 +14,17 @@ function saveToFile () {
 	var amountOwed = document.getElementById("amountOwed").value;
 	fs.appendFile("data/users.txt", memNumber + "," + fName + "," + lName + "," + school + "," + state + "," + email + "," + year + "," + code + "," + amountOwed + "\r\n", function(e){alert("Data Saved")});
 }
+function generateMemNum(){
+	var docArray = loadFromFile();
+	var newArray = docArray[docArray.length-1].split(',');
+	document.getElementById('memNumber').value = parseInt(newArray[0]) + 1;
+}
+function createForm(){
+	generateMemNum();
+	document.getElementById('code').max = "1";
+	document.getElementById('code').min = "0";
+	document.getElementById('amountOwed').min = "0";
+}
 function load() {	   
 	var lineNum = getLineNum();
 	var documentArray = loadFromFile();
@@ -300,7 +311,7 @@ function toExcel(filePath){
 }
 
 // Set handler for button click
-document.getElementById('btnSaveFile').addEventListener('click', function (e) {
+document.getElementById('submit').addEventListener('click', function (e) {
 	saveToFile();
 });
 
