@@ -21,6 +21,8 @@
     <h1 style = "font-size:40px;"> Select a User </h1>
     <div class = "form-group col-xs-5 col-lg-1">
         <input type="text" id="search" class= "form-control" placeholder="Type to search..."/>
+        <button id="hideOnPrint" class = "btn btn-md btn-primary"onclick="window.print()"> Print </button>
+	    <button id="hideOnPrint1" class = "btn btn-md btn-primary"onclick="chooseFile('#fileDialog');"> Export </button>
 	</div>
     <div id = "users">
         <table id="myTable" class = "table table-hover">

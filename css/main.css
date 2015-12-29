@@ -33,14 +33,19 @@ button.hideOnPrint{
 
 @media print {
     table.table-bordered{
-    page-break-before: always;
+    page-break-after: always;
     display: block;
-    }
-    #hideOnPrint{
-        display:none;
     }
     thead.printPageHeader{
         display: always;
+    }
+    tbody tr td{
+        white-space: -webkit-pre-wrap; 
+        word-break: break-all;
+        white-space: normal;
+    }
+    thead tr th{
+        font-size: 10px;
     }
     
 }
@@ -66,7 +71,4 @@ button.hideOnPrint{
     padding-top:40px;
 }
 
-/*body{
-    padding-top: 50px;
-}*/
 

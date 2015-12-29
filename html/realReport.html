@@ -7,8 +7,9 @@
 
 	<body onload="processData()">
 	<div class = "col-md-4 center-block">
-	<button id="hideOnPrint" class = "btn btn-md btn-primary"onclick="window.print()"> Print </button>
-	<button id="hideOnPrint" class = "btn btn-md btn-primary"onclick="chooseFile('#fileDialog');"> Export </button>
+	<button id="hideOnPrint" class = "btn btn-md btn-primary"onclick="doPrint()"> Print </button>
+	<button id="hideOnPrint1" class = "btn btn-md btn-primary"onclick="chooseFile('#fileDialog');"> Export </button>
+    <button id="back" class = "btn btn-md btn-primary"onclick="window.location = 'reports.html'"> Back </button>
 	</div>
 	<div id = "reportContainer">
 		
@@ -22,19 +23,8 @@
 
 	<input type="file" id="fileDialog" style="display:none;"  nwsaveas="FBLAReport.xls" />
 	<script>
-  function chooseFile(name) {
-		var chooser = document.querySelector(name);
-		chooser.addEventListener("change", function(evt) {
-		console.log(this.value);
-		var lastFile = this.value;
-		toExcel(lastFile);
-		}, false);
-	
-		chooser.click(); 
-		
-	}
-	
-</script>
+  
+    </script>
 	</body>
 
 	 	<script type="text/javascript" src="../js/app.js"></script> 

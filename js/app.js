@@ -56,7 +56,7 @@ function deleteUser(){
 	var lineNum = getLineNum();
 	var document1Array = documentArray;
 	document1Array.splice(lineNum, 1);
-	fs.writeFile("data/users.txt", document1Array.join("\r\n"), function(err){console.log("error")});
+	fs.writeFile("data/users.txt", document1Array.join("\r\n") + "\r\n", function(err){console.log("error")});
 	alert("Successfully Deleted User");
 	document.location="homepage.html";
 }
@@ -284,13 +284,14 @@ function createFooter(sortedArray, lineNum){
 				numOfOwing++;
 				sum+= parseInt(lineArray[8]);
 			}
-			
-			
-			
 		}
 		numOfInactive = sortedArray.length - numOfActive;
 		document.getElementById("footerBody").innerHTML = "Number Of Members Owing: " + numOfOwing + " Total Amount Owed: $" + sum;
 		document.getElementById("footerBody1").innerHTML = "Number of Active Members: " + numOfActive + " Number of Inactive Members: " + numOfInactive;
+	}
+	else{
+		document.getElementById("tempFoot").outerHTML = "";
+		delete document.getElementById('tempFoot'); 
 	}
 
 }
@@ -309,9 +310,29 @@ function toExcel(filePath){
     	}
 	});
 }
+function chooseFile(name) {
+    var chooser = document.querySelector(name);
+    chooser.addEventListener("change", function (evt) {
+        console.log(this.value);
+        var lastFile = this.value;
+        toExcel(lastFile);
+    }, false);
+    chooser.click();
+}
+function doPrint(){
+    document.getElementById("hideOnPrint").outerHTML = "";
+    delete document.getElementById("hideOnPrint");
+    document.getElementById("hideOnPrint1").outerHTML = "";
+    delete document.getElementById("hideOnPrint1");
+    document.getElementById("back").outerHTML = "";
+    delete document.getElementById("back");
+    window.print();
+    document.location = "homepage.html";
+}
 
 // Set handler for button click
 document.getElementById('submit').addEventListener('click', function (e) {
 	saveToFile();
 });
+
 
