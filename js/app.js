@@ -13,6 +13,78 @@ function saveToFile () {
 	var code = document.getElementById("code").value;
 	var amountOwed = document.getElementById("amountOwed").value;
 	fs.appendFile("data/users.txt", memNumber + "," + fName + "," + lName + "," + school + "," + state + "," + email + "," + year + "," + code + "," + amountOwed + "\r\n", function(e){alert("Data Saved")});
+    document.location = "homepage.html";
+}
+function validate() {
+    var memNumber = document.getElementById("memNumber").value;
+    var fName = document.getElementById("firstName").value;
+    var lName = document.getElementById("lastName").value;
+    var school = document.getElementById("school").value;
+    var state = document.getElementById("state").value;
+    var email = document.getElementById("email").value;
+    var year = document.getElementById("year").value;
+    var code = document.getElementById("code").value;
+    var amountOwed = document.getElementById("amountOwed").value;
+    var dataArray = [memNumber, fName, lName, school, state, email, year, code, amountOwed];
+    var nameArray = ["Membership Number", "First Name", "Last Name", "School", "State", "Email", "Year", "Code", "Amount Owed"];
+    var checkArray = [0, 1, 2, 3, 4, 5, 6, 7, 8];
+    for (i = 0; i < dataArray.length; i++) {
+        if (i == 0 || i == 6 || i == 8) {
+            if (dataArray[i] < 0 || dataArray[i] == null || dataArray[i] == "") {
+                alert("Please enter a valid " + nameArray[i]);
+                checkArray[i] = false;
+            }
+            else { checkArray[i] = true; }
+        }
+        else if (i == 7) {
+            if (dataArray[i] != 0 && dataArray[i] != 1) {
+                alert("Please enter a valid " + nameArray[i]);
+                checkArray[i] = false;
+            }
+            else {
+                checkArray[i] = true;
+            }
+        }
+        else {
+            if (dataArray[i] == null || dataArray[i] == "") {
+                alert("Please enter a valid " + nameArray[i]);
+                checkArray[i] = false;
+            }
+            else {
+                if (i == 5) {
+                    if (dataArray[i].indexOf('@') === -1) {
+                        alert("Please enter a valid " + nameArray[i]);
+                        checkArray[i] = false;
+                    }
+                    else { checkArray[i] = true; console.log("poop"); }
+                }
+                else {
+                    checkArray[i] = true;
+                }
+
+            }
+        }
+
+    }
+    console.log(checkArray);
+    var isTrue = isValidated(checkArray);
+    if (isTrue) {
+        console.log("True");
+        saveToFile();
+    }
+    else {
+        console.log("False");
+        console.log(checkArray);
+    }
+
+}
+function isValidated(array){
+    for (i = 0; i < array.length - 1; i++){
+        if (array[i] != array[i+1]){
+            return false;
+        }
+    }
+    return true;
 }
 function generateMemNum(){
 	var docArray = loadFromFile();
@@ -58,7 +130,7 @@ function deleteUser(){
 	document1Array.splice(lineNum, 1);
 	fs.writeFile("data/users.txt", document1Array.join("\r\n") + "\r\n", function(err){console.log("error")});
 	alert("Successfully Deleted User");
-	document.location="homepage.html";
+	document.location="editUsers.html";
 }
 function updateUser() {
 	var documentArray = loadFromFile();
@@ -67,7 +139,7 @@ function updateUser() {
 	document1Array[lineNum] = document.getElementById("memNumber").value + "," + document.getElementById("firstName").value + "," + document.getElementById("lastName").value + "," + document.getElementById("school").value + "," + document.getElementById("state").value + "," + document.getElementById("email").value + "," + document.getElementById("year").value + "," + document.getElementById("code").value + "," + document.getElementById("amountOwed").value
 	fs.writeFile("data/users.txt", document1Array.join("\r\n"), function(err){console.log("error")});
 	alert("Successfully Updated User");
-	document.location = "homepage.html";	  
+	document.location = "editUsers.html";	  
 }
 function createTable(array, table){
 	var allRows = "";
@@ -193,52 +265,53 @@ function gatherTableData(filteredMembers, lineNum) {
 }
 
 function createReportBody(filteredMembers, selectArray, withBreaks) {	// 10th element is grade
-	var container = document.getElementById("reportContainer");
-	var rows = "";
-	var colWidth = getColWidth(selectArray);
-	var gradeArray = [[2015, "Freshman"], [2014, "Sophmore"], [2013, "Junior"], [2012 ,"Senior"]]
-	for (var i = 0; i < filteredMembers.length; i++){
-		var lineArray = filteredMembers[i].toString().split(',');
-		if (withBreaks){
-			if (i % 50 === 0){
-			if (i > 0){
-					rows+= "</table>";
-				}
-				rows+= createReportHeaders(selectArray, i === 0);
-			}
-		}
-		else{
-			if (i == 0){
-				rows+= createReportHeaders(selectArray, true);
-			}
-		}
-		
-		rows+= "<tr>";
-		for (var j = 0; j < 10; j++){
-			if (selectArray[j]){
-				if (j === 9){
-					for (var p = 0; p < 4; p++){
-						if (lineArray[6] == gradeArray[p][0]){
-							rows+= "<td style='width: "+ colWidth + "%;max-width: "+ colWidth + "%;'>" + gradeArray[p][1] + "</td>";
-						}
-					}
-				}
-				else if (j == 1){
-					rows+= "<td style='width: "+ colWidth + "%;max-width: "+ colWidth + "%;'>" + lineArray[j] + " " + lineArray[j+1] + "</td>";
-				}
-				else if (j == 2){
-					continue;
-				}
-				else{
-					rows+= "<td style='width: "+ colWidth + "%;max-width: "+ colWidth + "%;'>" + lineArray[j] + "</td>"; 
-				}
+    var container = document.getElementById("reportContainer");
+    var rows = "";
+    var colWidth = getColWidth(selectArray);
+    var gradeArray = [[2015, "Freshman"], [2014, "Sophmore"], [2013, "Junior"], [2012, "Senior"]]
+    for (var i = 0; i < filteredMembers.length; i++) {
+        var lineArray = filteredMembers[i].toString().split(',');
+        if (withBreaks) {
+            if (i % 50 === 0) {
+                if (i > 0) {
+                    rows += "</table>";
+                }
+                rows += createReportHeaders(selectArray, i === 0);
+            }
+        }
+        else {
+            if (i == 0) {
+                rows += createReportHeaders(selectArray, true);
+            }
+        }
 
-			}
-		}
-		rows+= "</tr>"
-	}
-	if (!withBreaks){rows+= "</table>"}
-	return rows;
+        rows += "<tr>";
+        for (var j = 0; j < 10; j++) {
+            if (selectArray[j]) {
+                if (j === 9) {
+                    for (var p = 0; p < 4; p++) {
+                        if (lineArray[6] == gradeArray[p][0]) {
+                            rows += "<td>" + gradeArray[p][1] + "</td>";
+                        }
+                    }
+                }
+                else if (j == 1) {
+                    rows += "<td>" + lineArray[j] + " " + lineArray[j + 1] + "</td>";
+                }
+                else if (j == 2) {
+                    continue;
+                }
+                else {
+                    rows += "<td>" + lineArray[j] + "</td>";
+                }
+
+            }
+        }
+
+        rows += "</tr>"
+    }
+    if (!withBreaks) { rows += "</table>" }
+    return rows;
 }
 function createReportHeaders(selectArray, isFirst){
 		var headerArray = ["Membership Number", "Name",null,null,"State","Email","Year Joined",null,"Amount Owed", "Grade"];
@@ -330,9 +403,6 @@ function doPrint(){
     document.location = "homepage.html";
 }
 
-// Set handler for button click
-document.getElementById('submit').addEventListener('click', function (e) {
-	saveToFile();
-});
+
 
 

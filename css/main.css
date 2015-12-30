@@ -35,6 +35,7 @@ button.hideOnPrint{
     table.table-bordered{
     page-break-after: always;
     display: block;
+    table-layout: auto;
     }
     thead.printPageHeader{
         display: always;
@@ -45,7 +46,7 @@ button.hideOnPrint{
         white-space: normal;
     }
     thead tr th{
-        font-size: 10px;
+        font-size: 9px;
     }
     
 }
