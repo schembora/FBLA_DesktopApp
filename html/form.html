@@ -17,6 +17,8 @@
       </div>
     </nav>
     <body onLoad = "createForm()"id = "underNav">
+       <div class="alert alert-danger" id="alert">
+        </div>
     <h1> Add a User</h1>
     <div style = "width: 80%; margin: 10px auto 10px auto;">
 	<form class = "form-horizontal" role = "form" autocomplete="off">
@@ -81,7 +83,9 @@
 	</form>
     <button id = "submit" onClick = "validate()" class = "btn btn-success">Submit</button>
 	</div>
+ 
     </body>
-
+<script src = "../js/jquery-2.1.4.min.js" > </script>
 <script src = "../js/app.js" > </script>
+<script src = "../js/bootstrap.js" > </script>
 </html>

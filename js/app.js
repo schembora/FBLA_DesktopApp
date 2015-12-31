@@ -16,6 +16,7 @@ function saveToFile () {
     document.location = "homepage.html";
 }
 function validate() {
+    document.getElementById('alert').innerHTML= "";
     var memNumber = document.getElementById("memNumber").value;
     var fName = document.getElementById("firstName").value;
     var lName = document.getElementById("lastName").value;
@@ -27,18 +28,19 @@ function validate() {
     var amountOwed = document.getElementById("amountOwed").value;
     var dataArray = [memNumber, fName, lName, school, state, email, year, code, amountOwed];
     var nameArray = ["Membership Number", "First Name", "Last Name", "School", "State", "Email", "Year", "Code", "Amount Owed"];
-    var checkArray = [0, 1, 2, 3, 4, 5, 6, 7, 8];
+    var checkArray = [, , , , , , , , ];
+    var errors = [];
     for (i = 0; i < dataArray.length; i++) {
         if (i == 0 || i == 6 || i == 8) {
             if (dataArray[i] < 0 || dataArray[i] == null || dataArray[i] == "") {
-                alert("Please enter a valid " + nameArray[i]);
+                errors.push("Please enter a valid " + nameArray[i]);
                 checkArray[i] = false;
             }
             else { checkArray[i] = true; }
         }
         else if (i == 7) {
-            if (dataArray[i] != 0 && dataArray[i] != 1) {
-                alert("Please enter a valid " + nameArray[i]);
+            if ((dataArray[i] != 0 && dataArray[i] != 1) || dataArray[i] == "") {
+                errors.push("Please enter a valid " + nameArray[i]);
                 checkArray[i] = false;
             }
             else {
@@ -47,13 +49,13 @@ function validate() {
         }
         else {
             if (dataArray[i] == null || dataArray[i] == "") {
-                alert("Please enter a valid " + nameArray[i]);
+                errors.push("Please enter a valid " + nameArray[i]);
                 checkArray[i] = false;
             }
             else {
                 if (i == 5) {
                     if (dataArray[i].indexOf('@') === -1) {
-                        alert("Please enter a valid " + nameArray[i]);
+                        errors.push("Please enter a valid " + nameArray[i]);
                         checkArray[i] = false;
                     }
                     else { checkArray[i] = true; console.log("poop"); }
@@ -73,9 +75,13 @@ function validate() {
         saveToFile();
     }
     else {
-        console.log("False");
-        console.log(checkArray);
+        for (i = 0; i < errors.length; i++){
+            document.getElementById('alert').innerHTML +="<strong> Error: </strong>" +  (errors[i] + "<br>");
+        }
+        $('.alert').show();
     }
+    
+    
 
 }
 function isValidated(array){

@@ -71,5 +71,7 @@ button.hideOnPrint{
 #underNav{
     padding-top:40px;
 }
-
+.alert{
+    display: none;
+}
 
