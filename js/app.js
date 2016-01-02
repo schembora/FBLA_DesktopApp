@@ -15,7 +15,7 @@ function saveToFile () {
 	fs.appendFile("data/users.txt", memNumber + "," + fName + "," + lName + "," + school + "," + state + "," + email + "," + year + "," + code + "," + amountOwed + "\r\n", function(e){alert("Data Saved")});
     document.location = "homepage.html";
 }
-function validate() {
+function validate(newUser) {
     document.getElementById('alert').innerHTML= "";
     var memNumber = document.getElementById("memNumber").value;
     var fName = document.getElementById("firstName").value;
@@ -34,18 +34,10 @@ function validate() {
         if (i == 0 || i == 6 || i == 8) {
             if (dataArray[i] < 0 || dataArray[i] == null || dataArray[i] == "") {
                 errors.push("Please enter a valid " + nameArray[i]);
+                console.log(dataArray[7]);
                 checkArray[i] = false;
             }
             else { checkArray[i] = true; }
-        }
-        else if (i == 7) {
-            if ((dataArray[i] != 0 && dataArray[i] != 1) || dataArray[i] == "") {
-                errors.push("Please enter a valid " + nameArray[i]);
-                checkArray[i] = false;
-            }
-            else {
-                checkArray[i] = true;
-            }
         }
         else {
             if (dataArray[i] == null || dataArray[i] == "") {
@@ -72,7 +64,10 @@ function validate() {
     var isTrue = isValidated(checkArray);
     if (isTrue) {
         console.log("True");
-        saveToFile();
+        if (newUser){
+            saveToFile();
+        }
+        
     }
     else {
         for (i = 0; i < errors.length; i++){
@@ -81,7 +76,7 @@ function validate() {
         $('.alert').show();
     }
     
-    
+    return isTrue;
 
 }
 function isValidated(array){
@@ -99,8 +94,7 @@ function generateMemNum(){
 }
 function createForm(){
 	generateMemNum();
-	document.getElementById('code').max = "1";
-	document.getElementById('code').min = "0";
+	document.getElementById('year').min = "2000";
 	document.getElementById('amountOwed').min = "0";
 }
 function load() {	   
@@ -142,10 +136,15 @@ function updateUser() {
 	var documentArray = loadFromFile();
 	var lineNum = getLineNum();
 	var document1Array = documentArray;
-	document1Array[lineNum] = document.getElementById("memNumber").value + "," + document.getElementById("firstName").value + "," + document.getElementById("lastName").value + "," + document.getElementById("school").value + "," + document.getElementById("state").value + "," + document.getElementById("email").value + "," + document.getElementById("year").value + "," + document.getElementById("code").value + "," + document.getElementById("amountOwed").value
-	fs.writeFile("data/users.txt", document1Array.join("\r\n"), function(err){console.log("error")});
-	alert("Successfully Updated User");
-	document.location = "editUsers.html";	  
+    var isValidated = validate(false);
+    if (isValidated){
+        document1Array[lineNum] = document.getElementById("memNumber").value + "," + document.getElementById("firstName").value + "," + document.getElementById("lastName").value + "," + document.getElementById("school").value + "," + document.getElementById("state").value + "," + document.getElementById("email").value + "," + document.getElementById("year").value + "," + document.getElementById("code").value + "," + document.getElementById("amountOwed").value;
+        fs.writeFile("data/users.txt", document1Array.join("\r\n"), function (err) { console.log("error") });
+        alert("Successfully Updated User");
+        document.location = "editUsers.html";	
+    }
+    
+	  
 }
 function createTable(array, table){
 	var allRows = "";

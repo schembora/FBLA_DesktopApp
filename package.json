@@ -3,7 +3,7 @@
 	"main": "./html/homepage.html",
 	"window":{
 		"title": "FBLA Database",
-		"toolbar": true,
+		"toolbar": false,
 		"icon": "icon.png",
 		"frame": true,
 		"width": 800,
