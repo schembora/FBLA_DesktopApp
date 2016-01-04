@@ -141,7 +141,7 @@ function updateUser() {
 	var document1Array = documentArray;
     var isValidated = validate(false);
     if (isValidated){
-        document1Array[lineNum] = document.getElementById("memNumber").value + "," + document.getElementById("firstName").value + "," + document.getElementById("lastName").value + "," + document.getElementById("school").value + "," + document.getElementById("state").value + "," + document.getElementById("email").value + "," + document.getElementById("year").value + "," + document.getElementById("code").value + "," + document.getElementById("amountOwed").value;
+        document1Array[lineNum] = document.getElementById("memNumber").value + "," + document.getElementById("firstName").value + "," + document.getElementById("lastName").value + "," + document.getElementById("school").value + "," + document.getElementById("state").value + "," + document.getElementById("email").value + "," + document.getElementById("year").value + "," + document.getElementById("code").value + "," + document.getElementById("amountOwed").value + ',' + document.getElementById("grade").value;
         document1Array[document1Array.length-1] += "\n";
         fs.writeFile("data/users.txt", document1Array.join("\r\n"), function (err) { console.log("error") });
         alert("Successfully Updated User");
@@ -149,7 +149,7 @@ function updateUser() {
     }
     
 	  
-}d
+}
 function createTable(array, table){
 	var allRows = "";
 	for (i = 0; i < array.length; i++){
