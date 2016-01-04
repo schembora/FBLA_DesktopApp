@@ -12,7 +12,8 @@ function saveToFile () {
 	var year = document.getElementById("year").value;
 	var code = document.getElementById("code").value;
 	var amountOwed = document.getElementById("amountOwed").value;
-	fs.appendFile("data/users.txt", memNumber + "," + fName + "," + lName + "," + school + "," + state + "," + email + "," + year + "," + code + "," + amountOwed + "\r\n", function(e){alert("Data Saved")});
+    var grade = document.getElementById("grade").value;
+	fs.appendFile("data/users.txt", memNumber + "," + fName + "," + lName + "," + school + "," + state + "," + email + "," + year + "," + code + "," + amountOwed + ","  +  grade + "\r\n", function(e){alert("Data Saved")});
     document.location = "homepage.html";
 }
 function validate(newUser) {
@@ -32,7 +33,7 @@ function validate(newUser) {
     var errors = [];
     for (i = 0; i < dataArray.length; i++) {
         if (i == 0 || i == 6 || i == 8) {
-            if (dataArray[i] < 0 || dataArray[i] == null || dataArray[i] == "") {
+            if (dataArray[i] < 0 || dataArray[i] == null || dataArray[i] == "" ) {
                 errors.push("Please enter a valid " + nameArray[i]);
                 console.log(dataArray[7]);
                 checkArray[i] = false;
@@ -40,7 +41,7 @@ function validate(newUser) {
             else { checkArray[i] = true; }
         }
         else {
-            if (dataArray[i] == null || dataArray[i] == "") {
+            if (dataArray[i] == null || dataArray[i] == "" || (dataArray[i].indexOf(',') > -1)) {
                 errors.push("Please enter a valid " + nameArray[i]);
                 checkArray[i] = false;
             }
@@ -111,6 +112,8 @@ function load() {
 	document.getElementById("year").value = dataArray[6];
 	document.getElementById("code").value = dataArray[7];
 	document.getElementById("amountOwed").value = dataArray[8].trim();
+    console.log(dataArray[9]);
+    document.getElementById("grade").value = dataArray[9].trim();
 }
 function loadFromFile(){
 	var documentArray;
@@ -139,13 +142,14 @@ function updateUser() {
     var isValidated = validate(false);
     if (isValidated){
         document1Array[lineNum] = document.getElementById("memNumber").value + "," + document.getElementById("firstName").value + "," + document.getElementById("lastName").value + "," + document.getElementById("school").value + "," + document.getElementById("state").value + "," + document.getElementById("email").value + "," + document.getElementById("year").value + "," + document.getElementById("code").value + "," + document.getElementById("amountOwed").value;
+        document1Array[document1Array.length-1] += "\n";
         fs.writeFile("data/users.txt", document1Array.join("\r\n"), function (err) { console.log("error") });
         alert("Successfully Updated User");
         document.location = "editUsers.html";	
     }
     
 	  
-}
+}d
 function createTable(array, table){
 	var allRows = "";
 	for (i = 0; i < array.length; i++){
@@ -243,10 +247,10 @@ function filterMembers(sortedDataArray, lineNum) {
 	var senior = lineNum.split(',')[6] == "true";
 	var filteredMembers = sortedDataArray.filter(function(o){
 		var thisGuyOwes = parseInt(o.split(',')[8]) > 0;
-		var freshmen = parseInt(o.split(',')[6]) === 2015;
-		var sophmore = parseInt(o.split(',')[6]) === 2014;
-		var juniors = parseInt(o.split(',')[6]) === 2013;
-		var seniors = parseInt(o.split(',')[6]) === 2012;
+		var freshmen = parseInt(o.split(',')[9]) === 0;
+		var sophmore = parseInt(o.split(',')[9]) === 1;
+		var juniors = parseInt(o.split(',')[9]) === 2;
+		var seniors = parseInt(o.split(',')[9]) === 3;
 		if ((owes && thisGuyOwes || owesNot && !thisGuyOwes) && (frosh && freshmen || soph && sophmore || junior && juniors || senior && seniors)){
 			return true;
 		}
@@ -273,7 +277,7 @@ function createReportBody(filteredMembers, selectArray, withBreaks) {	// 10th el
     var container = document.getElementById("reportContainer");
     var rows = "";
     var colWidth = getColWidth(selectArray);
-    var gradeArray = [[2015, "Freshman"], [2014, "Sophmore"], [2013, "Junior"], [2012, "Senior"]]
+    var gradeArray = [[0, "Freshman"], [1, "Sophmore"], [2, "Junior"], [3, "Senior"]]
     for (var i = 0; i < filteredMembers.length; i++) {
         var lineArray = filteredMembers[i].toString().split(',');
         if (withBreaks) {
@@ -295,7 +299,7 @@ function createReportBody(filteredMembers, selectArray, withBreaks) {	// 10th el
             if (selectArray[j]) {
                 if (j === 9) {
                     for (var p = 0; p < 4; p++) {
-                        if (lineArray[6] == gradeArray[p][0]) {
+                        if (lineArray[9] == gradeArray[p][0]) {
                             rows += "<td>" + gradeArray[p][1] + "</td>";
                         }
                     }
