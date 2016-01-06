@@ -1,6 +1,7 @@
 /* global i */
 // Set a global var to hold filesystem utility object
 var fs = require('fs');
+var gui = require('nw.gui'); 
 // Function to write to a file
 function saveToFile () {
 	var memNumber = document.getElementById("memNumber").value;
@@ -154,7 +155,7 @@ function createTable(array, table){
 	var allRows = "";
 	for (i = 0; i < array.length; i++){
 		var array2 = array[i].toString().split(",");
-		allRows += "<tr> <td>" + array2[0] + "</td> <td>" + array2[1] + "</td> <td>" + array2[2] + "</td> <td> " + "<a href = \"selectedUser.html?" + i + "\" >" + "<span class ='glyphicon glyphicon-new-window' aria-hidden = 'true'></span>" + "</a> </td> <tr>";
+		allRows += "<tr> <td>" + array2[0] + "</td> <td>" + array2[1] + "</td> <td>" + array2[2] +"</td> <td>" + array2[3]+"</td> <td>" + array2[4]+"</td> <td>" + array2[5]+"</td> <td>" + array2[6]+ "</td> <td> "+ array2[8] + "</td> <td>" + (parseInt(array2[9]) + 9) + "</td> <td>" + "<a href = \"selectedUser.html?" + i + "\" >" + "<span class ='glyphicon glyphicon-new-window' aria-hidden = 'true'></span>" + "</a> </td> <tr>";
 	}			   
 	table.innerHTML= allRows;
 }
@@ -276,7 +277,6 @@ function gatherTableData(filteredMembers, lineNum) {
 function createReportBody(filteredMembers, selectArray, withBreaks) {	// 10th element is grade
     var container = document.getElementById("reportContainer");
     var rows = "";
-    var colWidth = getColWidth(selectArray);
     var gradeArray = [[0, "Freshman"], [1, "Sophmore"], [2, "Junior"], [3, "Senior"]]
     for (var i = 0; i < filteredMembers.length; i++) {
         var lineArray = filteredMembers[i].toString().split(',');
@@ -326,7 +326,6 @@ function createReportHeaders(selectArray, isFirst){
 		var headerArray = ["Membership Number", "Name",null,null,"State","Email","Year Joined",null,"Amount Owed", "Grade"];
 		//var table = document.getElementById("tableHead");
 		var head = "<table class='table table-bordered'><thead "+ (isFirst ? "" : "class = 'printPageHeader'") + "><tr>";
-		var colWidth = getColWidth(selectArray);
 		for (var i = 0; i < 10; i++){
 			if (selectArray[i]){
 				if (i == 2){continue;}
@@ -339,21 +338,8 @@ function createReportHeaders(selectArray, isFirst){
 		//table.innerHTML = head;
 		
 }
-function getColWidth(selectArray){
-	var numCols = 0;
-	for (var i = 0; i < 10; i++){
-		if (selectArray[i]){
-			numCols++;
-			if (i == 1){
-				numCols--;
-			}
-		}
-		
-	}
-	return Math.floor(100/numCols);
-}
 function createFooter(sortedArray, lineNum){
-	var numOfOwing = 0; var sum = 0;
+	var numOfOwing = 0; var sum = 0.0;
 	var numOfActive= 0, numOfInactive= 0;
 	var footerTrue = lineNum.split(',')[14] == "true";
 	if (footerTrue){
@@ -362,13 +348,15 @@ function createFooter(sortedArray, lineNum){
 			if (parseInt(lineArray[7]) > 0){
 				numOfActive++;				
 			}
-			if (parseInt(lineArray[8]) > 0){
+			if (parseFloat(lineArray[8]) > 0.0){
 				numOfOwing++;
-				sum+= parseInt(lineArray[8]);
+				sum+= parseFloat(lineArray[8]);
 			}
 		}
+        var totalAmount = Number(sum).toLocaleString('en');
+        console.log(totalAmount);
 		numOfInactive = sortedArray.length - numOfActive;
-		document.getElementById("footerBody").innerHTML = "Number Of Members Owing: " + numOfOwing + " Total Amount Owed: $" + sum;
+		document.getElementById("footerBody").innerHTML = "Number Of Members Owing: " + numOfOwing + " Total Amount Owed: $" + totalAmount;
 		document.getElementById("footerBody1").innerHTML = "Number of Active Members: " + numOfActive + " Number of Inactive Members: " + numOfInactive;
 	}
 	else{
@@ -409,7 +397,36 @@ function doPrint(){
     document.getElementById("back").outerHTML = "";
     delete document.getElementById("back");
     window.print();
-    document.location = "homepage.html";
+    document.location = "editUsers.html";
+}
+function exportToReportTable(){
+    $('#myTable tr').find('th:last-child, td:last-child').remove();
+    var table = document.getElementById("myTable");
+}
+function updateChoices(){
+   var memNum = $("#memNum").is(':checked');
+	var fullName = $("#name").is(':checked');
+    var school = $("#school").is(':checked');
+	var state = $("#state").is(':checked');
+	var email = $("#email").is(':checked');
+	var year = $("#year").is(':checked');
+	var grade = $("#grade").is(':checked');
+	var amountOwed = $("#amountOwed").is(':checked');
+    var truthArray = [memNum, fullName,fullName, school,state, email, year,amountOwed,grade];
+    var numOfColumns = document.getElementById('myTable').rows[0].cells.length;
+    for (i = 0; i < truthArray.length; i++){
+        if (truthArray[i] === false){
+            if (i == 1){
+                $('td:nth-child(' + (i+1) +'),th:nth-child(' + (i+1) + ')' ).remove();
+                $('td:nth-child(' + (i +1) +'),th:nth-child(' + (i+1) + ')' ).remove();
+            }
+            else if (i == 2){continue;}
+            else{
+                $('td:nth-child(' + (i+1) +'),th:nth-child(' + (i+1) + ')' ).remove();
+            }
+            
+        }
+    }
 }
 
 

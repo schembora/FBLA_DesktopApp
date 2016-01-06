@@ -32,11 +32,12 @@ button.hideOnPrint{
     }
 
 @media print {
-    table.table-bordered{
-    page-break-after: always;
+    #reportContainer table.table-bordered:not(:last-child){
     display: block;
     table-layout: auto;
+    page-break-after: always;
     }
+    
     thead.printPageHeader{
         display: always;
     }
@@ -65,6 +66,12 @@ button.hideOnPrint{
     thead.printPageHeader{
        display:none;
     }
+    #myTable th{
+        font-size: 14px;
+    }
+    #myTable tr td{
+        font-size: 12px;
+    }
 
     
 }
@@ -74,4 +81,3 @@ button.hideOnPrint{
 .alert{
     display: none;
 }
-
