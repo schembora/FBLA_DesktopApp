@@ -155,7 +155,10 @@ function createTable(array, table){
 	var allRows = "";
 	for (i = 0; i < array.length; i++){
 		var array2 = array[i].toString().split(",");
-		allRows += "<tr> <td>" + array2[0] + "</td> <td>" + array2[1] + "</td> <td>" + array2[2] +"</td> <td>" + array2[3]+"</td> <td>" + array2[4]+"</td> <td>" + array2[5]+"</td> <td>" + array2[6]+ "</td> <td> "+ array2[8] + "</td> <td>" + (parseInt(array2[9]) + 9) + "</td> <td>" + "<a href = \"selectedUser.html?" + i + "\" >" + "<span class ='glyphicon glyphicon-new-window' aria-hidden = 'true'></span>" + "</a> </td> <tr>";
+        var status;
+        if (array2[7] === "1"){status = "Active"}
+        else{status = "Inactive"};
+		allRows += "<tr> <td>" + array2[0] + "</td> <td>" + array2[1] + "</td> <td>" + array2[2] +"</td> <td>" + array2[3]+"</td> <td>" + array2[4]+"</td> <td>" + array2[5]+"</td> <td>" + array2[6]+ "</td> <td> "+ status + "</td> <td> "+ array2[8] + "</td> <td>" + (parseInt(array2[9]) + 9) + "</td> <td>" + "<a href = \"selectedUser.html?" + i + "\" >" + "<span class ='glyphicon glyphicon-new-window' aria-hidden = 'true'></span>" + "</a> </td> <tr>";
 	}			   
 	table.innerHTML= allRows;
 }
@@ -190,6 +193,8 @@ function createReport () {
 	var sortChoice = choiceElement.options[choiceElement.selectedIndex].value;
 	var owes = $("#optionOwes").is(':checked');
 	var owesNot = $("#optionOwesNot").is(':checked');
+    var active = $("#optionActive").is(':checked');
+    var inActive = $("#optionInactive").is(':checked');
 	var frosh = $("#frosh").is(':checked');
 	var soph = $("#soph").is(':checked');
 	var junior = $("#junior").is(':checked');
@@ -201,8 +206,10 @@ function createReport () {
 	var year = $("#year").is(':checked');
 	var grade = $("#grade").is(':checked');
 	var amountOwed = $("#amountOwed").is(':checked');
+    var status = $("#code").is(':checked');
+    var school = $("#school").is(':checked');
 	var radioTrue = $("#footerTrue").is(':checked');
-	document.location = "realReport.html?" + sortChoice + ',' + owes + ',' +  owesNot + ',' + frosh + ',' + soph + ',' + junior + ',' + senior+ ',' +  memNum + ',' + fullName + ',' +state + "," + email + ',' + year + ','+ grade + ',' + amountOwed + ',' + radioTrue;
+	document.location = "realReport.html?" + sortChoice + ',' + owes + ',' +  owesNot + ',' + frosh + ',' + soph + ',' + junior + ',' + senior+ ',' +  memNum + ',' + fullName + ',' +state + "," + email + ',' + year + ','+ grade + ',' + amountOwed + ',' + radioTrue + ',' + active+ ',' + inActive + ',' + school + ',' + status;
 }
 function processData(){
 	var lineNum = getLineNum();
@@ -218,7 +225,7 @@ function processData(){
 }
 function sortData(dataArray,sortColumnNumber){
 
-	if (sortColumnNumber === 8 || sortColumnNumber === 0){
+	if (sortColumnNumber === 8 || sortColumnNumber === 0 || sortColumnNumber === 7 || sortColumnNumber === 9){
 		var sorted1Array = dataArray.sort(function(a,b){
 			var a = parseInt(a.split(',')[sortColumnNumber]);
 			var b = parseInt(b.split(',')[sortColumnNumber]);
@@ -242,17 +249,20 @@ function sortData(dataArray,sortColumnNumber){
 function filterMembers(sortedDataArray, lineNum) {
 	var owes = lineNum.split(',')[1] == "true";
 	var owesNot = lineNum.split(',')[2] == "true";
+    var active = lineNum.split(',')[15] == "true";
+    var inActive = lineNum.split(',')[16] == "true"; 
 	var frosh = lineNum.split(',')[3] == "true";
 	var soph = lineNum.split(',')[4] == "true";
 	var junior = lineNum.split(',')[5] == "true";
 	var senior = lineNum.split(',')[6] == "true";
 	var filteredMembers = sortedDataArray.filter(function(o){
 		var thisGuyOwes = parseInt(o.split(',')[8]) > 0;
+        var thisGuyActive = parseInt(o.split(',')[7]) == 1;
 		var freshmen = parseInt(o.split(',')[9]) === 0;
 		var sophmore = parseInt(o.split(',')[9]) === 1;
 		var juniors = parseInt(o.split(',')[9]) === 2;
 		var seniors = parseInt(o.split(',')[9]) === 3;
-		if ((owes && thisGuyOwes || owesNot && !thisGuyOwes) && (frosh && freshmen || soph && sophmore || junior && juniors || senior && seniors)){
+		if ((owes && thisGuyOwes || owesNot && !thisGuyOwes) && (active && thisGuyActive || inActive && !thisGuyActive) && (frosh && freshmen || soph && sophmore || junior && juniors || senior && seniors)){
 			return true;
 		}
 		else{
@@ -269,7 +279,9 @@ function gatherTableData(filteredMembers, lineNum) {
 	var year = lineNum.split(',')[11] == "true";
 	var grade = lineNum.split(',')[12] == "true";
 	var amountOwed = lineNum.split(',')[13] == "true";
-	var selectArray = [memNum,fullName, fullName, false, state, email, year, false, amountOwed, grade];
+    var school = lineNum.split(',')[17] == "true";
+    var status = lineNum.split(',')[18] == "true";
+	var selectArray = [memNum,fullName, fullName, school, state, email, year, status, amountOwed, grade];
 	console.log(selectArray);
 	return selectArray;
 }
@@ -277,7 +289,7 @@ function gatherTableData(filteredMembers, lineNum) {
 function createReportBody(filteredMembers, selectArray, withBreaks) {	// 10th element is grade
     var container = document.getElementById("reportContainer");
     var rows = "";
-    var gradeArray = [[0, "Freshman"], [1, "Sophmore"], [2, "Junior"], [3, "Senior"]]
+    var statusArray = [[0, "Inactive"], [1, "Active"]];
     for (var i = 0; i < filteredMembers.length; i++) {
         var lineArray = filteredMembers[i].toString().split(',');
         if (withBreaks) {
@@ -298,9 +310,12 @@ function createReportBody(filteredMembers, selectArray, withBreaks) {	// 10th el
         for (var j = 0; j < 10; j++) {
             if (selectArray[j]) {
                 if (j === 9) {
-                    for (var p = 0; p < 4; p++) {
-                        if (lineArray[9] == gradeArray[p][0]) {
-                            rows += "<td>" + gradeArray[p][1] + "</td>";
+                    rows += "<td>" + (parseInt(lineArray[9]) + 9) + "</td>";
+                }
+                else if (j == 7){
+                    for (var p =0; p < 2; p++){
+                        if (lineArray[7] == statusArray[p][0]){
+                            rows+= "<td>" + statusArray[p][1] + "</td>";
                         }
                     }
                 }
@@ -323,9 +338,9 @@ function createReportBody(filteredMembers, selectArray, withBreaks) {	// 10th el
     return rows;
 }
 function createReportHeaders(selectArray, isFirst){
-		var headerArray = ["Membership Number", "Name",null,null,"State","Email","Year Joined",null,"Amount Owed", "Grade"];
+		var headerArray = ["Mem #", "Name",null,"School","State","Email","Year Joined","Status","Amount Owed", "Grade"];
 		//var table = document.getElementById("tableHead");
-		var head = "<table class='table table-bordered'><thead "+ (isFirst ? "" : "class = 'printPageHeader'") + "><tr>";
+		var head = "<table id = 'reportTable' class='table table-bordered'><thead "+ (isFirst ? "" : "class = 'printPageHeader'") + "><tr>";
 		for (var i = 0; i < 10; i++){
 			if (selectArray[i]){
 				if (i == 2){continue;}
@@ -354,7 +369,6 @@ function createFooter(sortedArray, lineNum){
 			}
 		}
         var totalAmount = Number(sum).toLocaleString('en');
-        console.log(totalAmount);
 		numOfInactive = sortedArray.length - numOfActive;
 		document.getElementById("footerBody").innerHTML = "Number Of Members Owing: " + numOfOwing + " Total Amount Owed: $" + totalAmount;
 		document.getElementById("footerBody1").innerHTML = "Number of Active Members: " + numOfActive + " Number of Inactive Members: " + numOfInactive;
@@ -402,31 +416,6 @@ function doPrint(){
 function exportToReportTable(){
     $('#myTable tr').find('th:last-child, td:last-child').remove();
     var table = document.getElementById("myTable");
-}
-function updateChoices(){
-   var memNum = $("#memNum").is(':checked');
-	var fullName = $("#name").is(':checked');
-    var school = $("#school").is(':checked');
-	var state = $("#state").is(':checked');
-	var email = $("#email").is(':checked');
-	var year = $("#year").is(':checked');
-	var grade = $("#grade").is(':checked');
-	var amountOwed = $("#amountOwed").is(':checked');
-    var truthArray = [memNum, fullName,fullName, school,state, email, year,amountOwed,grade];
-    var numOfColumns = document.getElementById('myTable').rows[0].cells.length;
-    for (i = 0; i < truthArray.length; i++){
-        if (truthArray[i] === false){
-            if (i == 1){
-                $('td:nth-child(' + (i+1) +'),th:nth-child(' + (i+1) + ')' ).remove();
-                $('td:nth-child(' + (i +1) +'),th:nth-child(' + (i+1) + ')' ).remove();
-            }
-            else if (i == 2){continue;}
-            else{
-                $('td:nth-child(' + (i+1) +'),th:nth-child(' + (i+1) + ')' ).remove();
-            }
-            
-        }
-    }
 }
 
 

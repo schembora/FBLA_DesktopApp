@@ -1,14 +1,14 @@
 {
     "webexe_settings": {
         "linux-x32": false, 
-        "export_dir": "output", 
+        "export_dir": "C:\\Program Files (x86)\\Web2Exe", 
         "windows-x64": true, 
         "uncompressed_folder": false, 
-        "download_dir": "C:\\\\Users\\\\Andrew\\\\AppData\\\\Local\\\\Web2Executable\\\\Web2Executable/files/downloads", 
+        "download_dir": "C:\\Program Files (x86)\\Web2Exe", 
         "nw_compression_level": 0, 
         "mac-x32": false, 
         "custom_script": "", 
-        "windows-x32": true, 
+        "windows-x32": false, 
         "mac-x64": false, 
         "nw_version": "0.12.3", 
         "force_download": false, 
@@ -16,7 +16,9 @@
     }, 
     "description": "", 
     "nodejs": true, 
-    "additional_trust_anchors": [], 
+    "additional_trust_anchors": [
+        ""
+    ], 
     "inject-js-end": "", 
     "keywords": [], 
     "node-main": "", 

@@ -24,28 +24,41 @@
     </nav>
 
     <body id = "underNav">
-              <div style = "margin-top:20%;">
+              <div style = "margin-top:10%;">
                 <label> Sort By </label>
                 <select id = 'sortChoices'>
                       <option value = "0"> Membership Number </option>
                       <option value = "1"> First Name </option>
-                      <option value  = "2"> Last Name </option>
+                      <option value = "2"> Last Name </option>
+                      <option value = "3"> School </option>
                       <option value = "4"> State </option>
+                      <option value = "5"> Email </option>
+                      <option value = "6"> Year </option>
+                      <option value = "7"> Status </option>
                       <option value = "8"> Amount Owed </option>
+                      <option value = "9"> Grade </option>
                 </select>
               </div>
               
                <div id = "checkboxes" style = "margin-bottom: 2%; margin-top: 2%;">
+                <label> Include: </label>
                 <label class="checkbox-inline"><input checked type="checkbox" id = "optionOwes">Members Owing A Balance</label>
                 <label class="checkbox-inline"><input checked type="checkbox" id = "optionOwesNot">Members Not Owing A Balance</label>
               </div>
               <div id = "checkboxes2" >
+                <label> Include: </label>
                 <label class="checkbox-inline"><input checked type="checkbox" id = "frosh">Freshmen</label>
                 <label class="checkbox-inline"><input checked type="checkbox" id = "soph">Sophmores</label>
                 <label class="checkbox-inline"><input checked type="checkbox" id = "junior">Juniors</label>
                 <label class="checkbox-inline"><input checked type="checkbox" id = "senior">Seniors</label>
               </div>
+              <div id = "checkboxes4" style = "margin-bottom: 2%; margin-top: 2%;">
+                <label> Include: </label>
+                <label class="checkbox-inline"><input checked type="checkbox" id = "optionActive">Active Members</label>
+                <label class="checkbox-inline"><input checked type="checkbox" id = "optionInactive">Inactive Members</label>
+              </div>
               <div id = 'checkboxes3' style = "margin-top: 2%;">
+                <label> Show: </label>
                 <label class="checkbox-inline"><input checked type="checkbox" id = "memNum">Membership Number</label>
                 <label class="checkbox-inline"><input checked type="checkbox" id = "name">Name</label>
                 <label class="checkbox-inline"><input checked type="checkbox" id = "state">State</label>
@@ -54,7 +67,12 @@
                 <label class="checkbox-inline"><input checked type="checkbox" id = "grade">Grade</label>
                 <label class="checkbox-inline"><input checked type="checkbox" id = "amountOwed">Amount Owed</label>
               </div>
+              <div id = "checkboxes5" style = "margin-bottom: 2%; margin-top: 2%;">
+                <label class="checkbox-inline"><input checked type="checkbox" id = "school">School</label>
+                <label class="checkbox-inline"><input checked type="checkbox" id = "code">Status</label>
+              </div>
               <div id = "footerChoice" style = "margin-bottom: 15%; margin-top: 2%;">
+                <label> Show </label>
                 <label class = "radio-inline"><input checked type= "radio" name = "inputFoot" id = "footerTrue"> Footer </label>
                 <label class = "radio-inline"><input type= "radio" name = "inputFoot" id = "footerFalse"> No Footer </label>    
               </div>

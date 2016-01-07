@@ -49,6 +49,9 @@ button.hideOnPrint{
     thead tr th{
         font-size: 9px;
     }
+    #reportTable tr td{
+        font-size: 9px;
+    }
     
 }
 @media only screen{
@@ -70,6 +73,9 @@ button.hideOnPrint{
         font-size: 14px;
     }
     #myTable tr td{
+        font-size: 12px;
+    }
+    #reportTable tr td{
         font-size: 12px;
     }
 
