@@ -175,18 +175,31 @@ function sortTable() {
 	}); 
 }
 function search() {
-	$(document).ready(function(){
-            $("#search").keyup(function(){
+    var choiceElement = document.getElementById('searchChoices');
+    $(document).ready(function () {
+        $("#search").keyup(function () {
             _this = this;
-            // Only show the tr you are looking for
-            $.each($("#myTable tbody").find("tr"), function() {
-                if($(this).text().toLowerCase().indexOf($(_this).val().toLowerCase()) == -1)
-                $(this).hide();
-                else
-                    $(this).show();                
-            });
-        }); 
-      });
+            var searchChoice = choiceElement.options[choiceElement.selectedIndex].value;
+            console.log(searchChoice);
+            if (searchChoice === "10") {
+                $.each($("#myTable tbody").find("tr"), function () {
+                    if ($(this).text().toLowerCase().indexOf($(_this).val().toLowerCase()) == -1)
+                        $(this).hide();
+                    else
+                        $(this).show();
+                });
+            }
+            else {
+                $.each($("#myTable tbody ").find("tr"), function () {
+                    if ($(this).find("td").eq(parseInt(searchChoice)).text().toLowerCase().indexOf($(_this).val().toLowerCase()) == -1)
+                        $(this).hide();
+                    else
+                        $(this).show();
+                });
+            }
+
+        });
+    });
 }
 function createReport () {
 	var choiceElement = document.getElementById('sortChoices');
