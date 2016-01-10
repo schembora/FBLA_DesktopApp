@@ -12,6 +12,7 @@
             <li><a href="form.html">Add User</a></li>
             <li class = "active"><a href="editUsers.html">View Users</a></li>
             <li ><a href="reports.html"> Reports </a></li>
+            <li ><a href="help.html"> Help </a></li>
           </ul>
         </div>
       </div>
@@ -35,6 +36,10 @@
                       <option value = "8"> Amount Owed </option>
                       <option value = "9"> Grade </option>
                 </select>
+    <div class="alert alert-info" id = "tipAlert">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        <strong>Info!</strong> Click the column header to sort that column.
+    </div>
     <div id = "users">
         <table id="myTable" class = "table table-hover">
         <thead> 
@@ -59,4 +64,5 @@
     </div>
 </body>    
          <script type="text/javascript" src="../js/app.js"></script> 
+         <script type="text/javascript" src="../js/bootstrap.min.js"></script>
 </html>

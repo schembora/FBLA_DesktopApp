@@ -77,13 +77,21 @@ button.hideOnPrint{
     }
     #reportTable tr td{
         font-size: 12px;
-    }
+    }hh
 
     
 }
 #underNav{
     padding-top:40px;
 }
-.alert{
+#alert{
     display: none;
+}
+#tipAlert{
+    padding:8px;
+    text-align: left;
+    margin-top: 20px;
+    margin-right: 20px;
+    margin-left:20px;
+
 }
