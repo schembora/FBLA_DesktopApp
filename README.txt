@@ -16,7 +16,25 @@ ______           _   _           ______        ____________ _       ___    _____
                                         |___/                                            |___/                                             
 How To Run:
 
-Launch nw.exe. That's it!
+Launch FBLADesktopAPP.exe. That's it!
 
 System Requirements:
-x86 or x64 Windows 7+                              
+x86 or x64 Windows 7+                          
+
+Technical Arhitecture Summary:
+The FBLA Database Application is a desktop application. However, I developed this application using web technologies and a product called 
+Node-Webkit thats lets you package a node.js based website into a fully functional desktop application. For simplification, I used a .csv 
+(Commas Seperated Values) file (named data/users.csv) for storing the student membership data. 
+
+
+Technologies Used:
+Javascript
+HTML
+CSS
+Jquery
+Bootstrap
+Node.js
+Node-Webkit
+Tablesorter jquery plugin
+
+    

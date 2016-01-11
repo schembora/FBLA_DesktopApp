@@ -1,26 +1,30 @@
-/* global i */
-// Set a global var to hold filesystem utility object
 var fs = require('fs');
-// Function to write to a file
-function saveToFile () {
+// Saves the new user to the file if the validation is correct
+function saveToFile () {  
     var memberArray = gatherUserData();
-	fs.appendFile("data/users.csv", memberArray[0] + "," + memberArray[1] + "," + memberArray[2] + "," + memberArray[3] + "," + memberArray[4] + "," + memberArray[5] + "," + memberArray[6] + "," + memberArray[7] + "," + memberArray[8] + ","  +  memberArray[9] + "\r\n", function(e){alert("Data Saved")});
-    document.location = "editUsers.html";
+    var isValidated = validate();
+    if (isValidated){
+        fs.appendFile("data/users.csv", memberArray[0] + "," + memberArray[1] + "," + memberArray[2] + "," + memberArray[3] + "," + memberArray[4] + "," + memberArray[5] + "," + memberArray[6] + "," + memberArray[7] + "," + memberArray[8] + ","  +  memberArray[9] + "\r\n", function(e){alert("Data Saved")});
+        document.location = "editUsers.html";
+    }
+	
 }
-function gatherUserData(){
+// Gathers input data from the input fields
+function gatherUserData(){ 
     var memNumber = document.getElementById("memNumber").value;
 	var fName = document.getElementById("firstName").value;
 	var lName = document.getElementById("lastName").value;
 	var school = document.getElementById("school").value;
 	var state = document.getElementById("state").value;
-	var email = document.getElementById("email").value;
+	var email = document.getElementById("email").value;        
 	var year = document.getElementById("year").value;
 	var code = document.getElementById("code").value;
 	var amountOwed = document.getElementById("amountOwed").value;
     var grade = document.getElementById("grade").value;
     return [memNumber, fName, lName, school, state, email, year, code, amountOwed,grade];
 }
-function validate(newUser) {
+// Validates the input data to make sure all the data is acceptable
+function validate() { 
     document.getElementById('alert').innerHTML = "";
     var dataArray = gatherUserData();
     var nameArray = ["Membership Number", "First Name", "Last Name", "School", "State", "Email", "Year", "Code", "Amount Owed", "Grade"];
@@ -28,19 +32,19 @@ function validate(newUser) {
     var errors = [];
     for (i = 0; i < dataArray.length; i++) {
         if (i == 0 || i == 6 || i == 8) {
-            if (dataArray[i] < 0 || dataArray[i] == null || dataArray[i] == "") {
+            if (dataArray[i] < 0 || dataArray[i] == null || dataArray[i] == "") {   // Makes sure the numeric fields have no strings,etc.
                 errors.push("Please enter a valid " + nameArray[i]);
                 checkArray[i] = false;
             }
             else { checkArray[i] = true; }
         }
         else {
-            if (dataArray[i] == null || dataArray[i] == "" || (dataArray[i].indexOf(',') > -1)) {
+            if (dataArray[i] == null || dataArray[i] == "" || (dataArray[i].indexOf(',') > -1)) { // Makes sure string fields are not empty and do not contain any commas(file is a csv)
                 errors.push("Please enter a valid " + nameArray[i]);
                 checkArray[i] = false;
             }
             else {
-                if (i == 5) {
+                if (i == 5) {   // Makes sure email has an @
                     if (dataArray[i].indexOf('@') === -1) {
                         errors.push("Please enter a valid " + nameArray[i]);
                         checkArray[i] = false;
@@ -55,15 +59,8 @@ function validate(newUser) {
         }
 
     }
-    var isTrue = isValidated(checkArray);
-    if (isTrue) {
-        console.log("True");
-        if (newUser) {
-            saveToFile();
-        }
-
-    }
-    else {
+    var isTrue = isValidated(checkArray); // Puts the array which holds the true and falses for validation into a function to see if all the values are true
+    if(!isTrue) {
         for (i = 0; i < errors.length; i++) {
             document.getElementById('alert').innerHTML += "<strong> Error: </strong>" + (errors[i] + "<br>");
         }
@@ -73,7 +70,8 @@ function validate(newUser) {
     return isTrue;
 
 }
-function isValidated(array){
+ // Checks to see if the entire array for errors is true
+function isValidated(array){   
     for (i = 0; i < array.length - 1; i++){
         if (array[i] != array[i+1]){
             return false;
@@ -81,16 +79,19 @@ function isValidated(array){
     }
     return true;
 }
+// Generates membership number by adding 1 to the last used membership number
 function generateMemNum(){
 	var docArray = loadFromFile();
-	var newArray = docArray[docArray.length-1].split(',');         // Generates membership number by adding 1 to the last used membership number
+	var newArray = docArray[docArray.length-1].split(',');         
 	document.getElementById('memNumber').value = parseInt(newArray[0]) + 1;
 }
+// Creates original add user form
 function createForm(){
 	generateMemNum();
-	document.getElementById('year').min = "2000";          // Creates original add user form
+	document.getElementById('year').min = "2000";          
 	document.getElementById('amountOwed').min = "0";
 }
+// Loads the selected users information. Gets the selected line number then splits by commas to get the actual membership array
 function load() {	   
 	var lineNum = getLineNum();
 	var documentArray = loadFromFile();        // document array is WHOLE FILE
@@ -99,7 +100,7 @@ function load() {
 	document.getElementById("memNumber").value = memberArray[0];
 	document.getElementById("firstName").value = memberArray[1];
 	document.getElementById("lastName").value = memberArray[2];
-	document.getElementById("school").value = memberArray[3];        // Loads the selected users information. Gets the selected line number then splits by commas to get the actual membership array
+	document.getElementById("school").value = memberArray[3];        
 	document.getElementById("state").value = memberArray[4];
 	document.getElementById("email").value = memberArray[5];
 	document.getElementById("year").value = memberArray[6];
@@ -107,31 +108,34 @@ function load() {
 	document.getElementById("amountOwed").value = memberArray[8].trim();
     document.getElementById("grade").value = memberArray[9].trim();
 }
+ // Returns whole file split by lines
 function loadFromFile(){
 	var documentArray;
-	documentArray = fs.readFileSync("data/users.csv").toString().split("\n");      // Returns whole file split by lines
+	documentArray = fs.readFileSync("data/users.csv").toString().split("\n");    
 	documentArray.pop();
 	return documentArray;
 }
+// Gets line number of the user that is being viewed/edited
 function getLineNum(){
 	var lineArray = window.location.href.split("?");
-	var lineNum = lineArray[1];                            // Gets line number of the user that is being viewed/edited
+	var lineNum = lineArray[1];                            
 	return lineNum;
 }
-function deleteUser(){
+// Deletes user by splicing the user's line
+function deleteUser(){ 
 	var documentArray = loadFromFile();
 	var lineNum = getLineNum();
-	var document1Array = documentArray;
-	document1Array.splice(lineNum, 1);     // Deletes user by splicing the user's line
-	fs.writeFile("data/users.csv", document1Array.join("\r\n") + "\r\n", function(err){console.log("error")});
+	documentArray.splice(lineNum, 1);    
+	fs.writeFile("data/users.csv", documentArray.join("\r\n") + "\r\n", function(err){console.log("error")});
 	alert("Successfully Deleted User");
 	document.location="editUsers.html";
 }
+// Updates user by first checking if user is all data is validated. Then it overrides the current data for that user. It then writes it to the file
 function updateUser() {
 	var documentArray = loadFromFile();
 	var lineNum = getLineNum();
 	var document1Array = documentArray;
-    var isValidated = validate(false);      // Updates user by first checking if user is all data is validated. Then it overrides the current data for that user. It then writes it to the file
+    var isValidated = validate(false);      
     var userArray = gatherUserData();
     if (isValidated){
         document1Array[lineNum] = userArray[0] + "," + userArray[1] + "," + userArray[2] + "," + userArray[3] + "," + userArray[4] + "," + userArray[5] + "," + userArray[6] + "," + userArray[7] + "," + userArray[8] + ',' + userArray[9];
@@ -143,7 +147,8 @@ function updateUser() {
     
 	  
 }
-function createTable(array, table){     // Generates complete table  Takes an array and a table as parameters
+// Generates complete table  Takes an array and a table as parameters
+function createTable(array, table){     
 	var allRows = "";
 	for (i = 0; i < array.length; i++){
 		var currentMemberArray = array[i].toString().split(",");
@@ -154,29 +159,31 @@ function createTable(array, table){     // Generates complete table  Takes an ar
 	}			                                                                                   // Adds 9 to grade because in the file it is stored as 0,1,2,3
 	table.innerHTML= allRows;
 }
+// Creates the table, adds the sort feature, and the search
 function displayTable(){
 	var dataArray = loadFromFile();
-	var table = document.getElementById("mytableBody");
-	createTable(dataArray, table);                             // Creates the table, adds the sort feature, and the search
+	var table = document.getElementById("mytableBody");                    
+	createTable(dataArray, table);                             
 	sortTable();
 	search();
 }
+// Sorts the Main Table - Created From Tablesorter Jquery Plugin (Auto-sorts membership number to begin with)
 function sortTable() {
 	$(document).ready(function() { 
-		$("#myTable").tablesorter({sortList:[[0,0], [1,0]]});     // Created From Tablesorter Jquery Plugin (Auto-sorts membership number to begin with)
+		$("#myTable").tablesorter({sortList:[[0,0], [1,0]]});     
 	}); 
 }
-function search() {     // Basically checks which table rows match the searched text and hides the table rows that do not
+// Basically checks which table rows match the searched text and hides the table rows that do not
+function search() {     
     var choiceElement = document.getElementById('searchChoices');
     $(document).ready(function () {
         $("#search").keyup(function () {
             _this = this;
             var searchChoice = choiceElement.options[choiceElement.selectedIndex].value;
-            console.log(searchChoice);
             if (searchChoice === "10") {    // If all rows to be searched is selected
                 $.each($("#myTable tbody").find("tr"), function () {
                     if ($(this).text().toLowerCase().indexOf($(_this).val().toLowerCase()) == -1)
-                        $(this).hide();
+                        $(this).hide(); // Hides the rows that do not match the searched string
                     else
                         $(this).show();
                 });
@@ -193,7 +200,8 @@ function search() {     // Basically checks which table rows match the searched 
         });
     });
 }
-function createReport () {      // Checks which checkboxes/radios/selects have been selected in the reports page
+ // Checks which checkboxes/radios/selects have been selected in the reports page
+function createReport () {     
 	var choiceElement = document.getElementById('sortChoices');
 	var sortChoice = choiceElement.options[choiceElement.selectedIndex].value;
 	var owes = $("#optionOwes").is(':checked');
@@ -216,7 +224,8 @@ function createReport () {      // Checks which checkboxes/radios/selects have b
 	var radioTrue = $("#footerTrue").is(':checked');
 	document.location = "realReport.html?" + sortChoice + ',' + owes + ',' +  owesNot + ',' + frosh + ',' + soph + ',' + junior + ',' + senior+ ',' +  memNum + ',' + fullName + ',' +state + "," + email + ',' + year + ','+ grade + ',' + amountOwed + ',' + radioTrue + ',' + active+ ',' + inActive + ',' + school + ',' + status; // Add the values after a ? as booleans so the next page can tell which ones are selected
 }
-function processData(){
+// Basically calls all the functions to create the actual report
+function processData(){ 
 	var reportDataArray = getReportData();
     var filteredMembers = reportDataArray[1];
     var selectArray = reportDataArray[0];
@@ -226,17 +235,19 @@ function processData(){
 	document.getElementById("reportContainer").innerHTML= tableHtml;
 	createFooter(filteredMembers, lineNum);
 }
+// Goes through a couple functions to get the data for the selected report
 function getReportData(){
     var lineNum = getLineNum();
 	var dataArray = loadFromFile();
 	var userSelectedData = lineNum.split(',');
 	var sortColumnNumber = parseInt(userSelectedData[0]);
 	var dataArraySorted = sortData(dataArray, sortColumnNumber);
-	var filteredMembers = filterMembers(dataArraySorted, lineNum);     // Goes through a couple functions to get the data for the selected report
+	var filteredMembers = filterMembers(dataArraySorted, lineNum);     
 	var selectArray = gatherTableData(filteredMembers, lineNum);
     return [selectArray,filteredMembers];
 }
-function sortData(dataArray,sortColumnNumber){ // Sorts data based on what user selected
+// Sorts data based on what user selected
+function sortData(dataArray,sortColumnNumber){ 
 
 	if (sortColumnNumber === 8 || sortColumnNumber === 0 || sortColumnNumber === 7 || sortColumnNumber === 9){ // When sorting numerically
 		var sorted1Array = dataArray.sort(function(a,b){
@@ -259,7 +270,8 @@ function sortData(dataArray,sortColumnNumber){ // Sorts data based on what user 
 	}
 	
 }
-function filterMembers(sortedDataArray, lineNum) { // Filters any options out that were not selected
+// Filters any options out that were not selected
+function filterMembers(sortedDataArray, lineNum) { 
 	var owes = lineNum.split(',')[1] == "true";
 	var owesNot = lineNum.split(',')[2] == "true";
 	var frosh = lineNum.split(',')[3] == "true";           // Checks which options were selected by basically splitting the url by commas
@@ -284,7 +296,8 @@ function filterMembers(sortedDataArray, lineNum) { // Filters any options out th
 	});
 	return filteredMembers;
 }
-function gatherTableData(filteredMembers, lineNum) {        // Gathers the data for the choices that want to be shown in the report
+// Gathers the data for the choices that want to be shown in the report
+function gatherTableData(filteredMembers, lineNum) {        
 	var memNum =  lineNum.split(',')[7] == "true";
 	var fullName = lineNum.split(',')[8] == "true";
 	var state = lineNum.split(',')[9] == "true";
@@ -297,8 +310,8 @@ function gatherTableData(filteredMembers, lineNum) {        // Gathers the data 
 	var selectArray = [memNum,fullName, fullName, school, state, email, year, status, amountOwed, grade];
 	return selectArray;
 }
-
-function createReportBody(filteredMembers, selectArray, withBreaks) {
+// Creates the report body with page breaks
+function createReportBody(filteredMembers, selectArray, withBreaks) { 
     var rows = "";
     var statusArray = [[0, "Inactive"], [1, "Active"]]; // 0 for inactive, 1 for active
     for (var i = 0; i < filteredMembers.length; i++) {
@@ -348,7 +361,8 @@ function createReportBody(filteredMembers, selectArray, withBreaks) {
     if (!withBreaks) { rows += "</table>" } // When it is not exporting to excel generate table with breaks normally
     return rows;
 }
-function createReportHeaders(selectArray, isFirst){ // Creates the table header depending on the user's choices
+// Creates the table header depending on the user's choices
+function createReportHeaders(selectArray, isFirst){ 
 		var headerArray = ["Mem #", "Name",null,"School","State","Email","Year Joined","Status","Amount Owed", "Grade"];
 		var head = "<table id = 'reportTable' class='table table-bordered'><thead "+ (isFirst ? "" : "class = 'printPageHeader'") + "><tr>"; // Only want to display the first table header when viewing
 		for (var i = 0; i < 10; i++){
@@ -361,7 +375,8 @@ function createReportHeaders(selectArray, isFirst){ // Creates the table header 
 		return head;
 		
 }
-function createFooter(sortedArray, lineNum){ // Creates the footer if the user wants one
+// Creates the footer if the user wants one
+function createFooter(sortedArray, lineNum){ 
 	var numOfOwing = 0; var sum = 0.0;
 	var numOfActive= 0, numOfInactive= 0;
 	var footerTrue = lineNum.split(',')[14] == "true";
@@ -387,7 +402,8 @@ function createFooter(sortedArray, lineNum){ // Creates the footer if the user w
 	}
 
 }
-function toExcel(filePath){
+// Creates the report w/o the page breaks then calls the open dialogue function
+function toExcel(filePath){ 
 	var reportDataArray = getReportData();
     var filteredMembers = reportDataArray[1];
     var selectArray = reportDataArray[0];
@@ -398,27 +414,27 @@ function toExcel(filePath){
     	}
 	});
 }
-function chooseFile(name) {
+// Opens Save File Diaglogue - Built into node.js
+function chooseFile(name) { 
     var chooser = document.querySelector(name);
     chooser.addEventListener("change", function (evt) {
         console.log(this.value);
         var lastFile = this.value;
-        toExcel(lastFile);
+        toExcel(lastFile);  // Calls the toExcel function which writes the report to the location now specified
     }, false);
     chooser.click();
 }
+// Deletes the buttons on the reports and calls the print function
 function doPrint(){
     document.getElementById("hideOnPrint").outerHTML = "";
     delete document.getElementById("hideOnPrint");
     document.getElementById("hideOnPrint1").outerHTML = "";
-    delete document.getElementById("hideOnPrint1");
+    delete document.getElementById("hideOnPrint1");             
     document.getElementById("back").outerHTML = "";
     delete document.getElementById("back");
     window.print();
     document.location = "editUsers.html";
 }
-
-
 
 
 
